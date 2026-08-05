@@ -65,7 +65,7 @@ filesystem timestamp fixed, just not the embedded container metadata.
 Run the script, then either:
 - drag files or a folder onto the window, or
 - use `Browse…` for a folder, or `Files…` to pick specific files, or
-- type a folder path directly into the field
+- paste a folder path directly into the field
 
 Check **Dry run** first to preview what would change before writing
 anything. Click **Fix Dates**.
