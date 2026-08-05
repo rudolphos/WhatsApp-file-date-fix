@@ -43,6 +43,9 @@ phone and not deal with a copy round-trip.
 
 ## `WhatsAppDateFixer.py` (desktop)
 
+<img width="1025" height="763" alt="WhatsAppDateFixer" src="https://github.com/user-attachments/assets/450aeca3-e187-4bda-ba0b-f7ab14bc3313" />
+
+
 Point it at a folder or drop files/folders onto it. For each file:
 
 - Sets Windows file creation + modified time from the date in the filename
@@ -83,8 +86,9 @@ anything. Click **Fix Dates**.
 
 ## `WhatsAppDateFixADB.py` (on-device via ADB)
 
-Runs from your PC, operates on the phone over USB — no manual copying,
-no Termux.
+<img width="1125" height="813" alt="WhatsAppDateFixerADB" src="https://github.com/user-attachments/assets/e63b3624-563a-429c-ae64-3d7da248544d" />
+
+Runs from your PC, operates on the phone over USB — no manual copying.
 
 Per file:
 
@@ -106,8 +110,8 @@ is untouched.
 
 Same as above, plus:
 
-Android Platform Tools (`adb`) on PATH. USB debugging enabled on the
-phone, and you'll need to accept the RSA authorization prompt on first
+Android Platform Tools (`adb`) on Windows PATH.
+USB debugging enabled on the phone, and you'll need to accept the RSA authorization prompt on first
 connect.
 
 ### Usage
@@ -134,7 +138,7 @@ Check **Dry run** first — it's the default. Click **Scan & Fix via ADB**.
 
 ---
 
-## Back up first
+## Back up first!
 
 Both tools write directly to your files — EXIF gets rewritten in place,
 video containers get remuxed, and the ADB tool overwrites files on your
