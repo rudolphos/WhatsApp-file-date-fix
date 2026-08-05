@@ -1,7 +1,5 @@
 """
-WhatsApp Media Date Fixer — ADB (runs on Windows, fixes Android)
-================================================================
-Runs entirely from your PC via ADB. No Termux, no phone interaction.
+WhatsApp Media Date Fixer — ADB version
 
 Heuristic per file:
   - Parse YYYYMMDD from filename
@@ -18,7 +16,7 @@ Requirements:
   pip install tkinterdnd2 piexif pillow
   adb on PATH (Android Platform Tools)
 
-USB Debugging must be enabled on phone.
+"USB Debugging" must be enabled on phone.
 """
 
 import os
