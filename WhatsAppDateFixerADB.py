@@ -44,7 +44,7 @@ try:
 except ImportError:
     HAS_PIEXIF = False
 
-#CONFIG
+#conf
 DEFAULT_FOLDERS = [
     # Android 11+ paths (current)
     "/sdcard/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images",
@@ -80,6 +80,8 @@ def adb(args: list, capture=True, timeout=60) -> subprocess.CompletedProcess | N
             ["adb"] + args,
             capture_output=capture,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=timeout
         )
     except subprocess.TimeoutExpired:
@@ -315,8 +317,6 @@ def process_file_adb(remote_path: str, dry_run: bool) -> dict:
     res["details"] = ", ".join(actions) if actions else "timestamps ok"
     return res
 
-
-#GUI
 
 class App(BASE):
     def __init__(self):
