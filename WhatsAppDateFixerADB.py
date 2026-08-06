@@ -16,7 +16,7 @@ Requirements:
   pip install tkinterdnd2 piexif pillow
   adb on PATH (Android Platform Tools)
 
-"USB Debugging" must be enabled on phone.
+USB Debugging must be enabled on phone.
 """
 
 import os
@@ -42,7 +42,6 @@ try:
 except ImportError:
     HAS_PIEXIF = False
 
-#conf
 DEFAULT_FOLDERS = [
     # Android 11+ paths (current)
     "/sdcard/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images",
@@ -161,14 +160,6 @@ def md5_local(path: str) -> str:
     return h.hexdigest()
 
 
-def md5_device(remote_path: str) -> str | None:
-    """md5sum is available on all Android devices."""
-    r = adb(["shell", f"md5sum '{remote_path}'"])
-    if r.returncode != 0 or not r.stdout.strip():
-        return None
-    return r.stdout.strip().split()[0].lower()
-
-
 def is_valid_jpeg(path: str) -> bool:
     """Check JPEG SOI and EOI markers — catches truncation/corruption."""
     try:
@@ -264,13 +255,15 @@ def process_file_adb(remote_path: str, dry_run: bool) -> dict:
 
             # 1. Pull
             pull = adb(["pull", remote_path, local])
-            if pull.returncode != 0 or not os.path.exists(local):
+            if pull is None or pull.returncode != 0 or not os.path.exists(local):
                 actions.append("pull_failed"); goto_cleanup = True
             else:
                 # 2. Verify pull integrity: hash must match device
                 hash_before_device = md5_device(remote_path)
                 hash_pulled         = md5_local(local)
-                if hash_before_device != hash_pulled:
+                if hash_before_device is None:
+                    actions.append("device_hash_unavailable"); goto_cleanup = True
+                elif hash_before_device != hash_pulled:
                     actions.append(f"pull_hash_mismatch"); goto_cleanup = True
                 elif not is_valid_jpeg(local):
                     actions.append("pulled_jpeg_invalid"); goto_cleanup = True
@@ -288,20 +281,23 @@ def process_file_adb(remote_path: str, dry_run: bool) -> dict:
                 else:
                     # 4. Push to TEMP path (never touching original yet)
                     push = adb(["push", local, remote_tmp])
-                    if push.returncode != 0:
+                    if push is None or push.returncode != 0:
                         actions.append("push_tmp_failed")
                         adb(["shell", f"rm -f '{remote_tmp}'"])
                     else:
                         # 5. Verify pushed file hash matches local patched file
                         hash_patched_local  = md5_local(local)
                         hash_patched_device = md5_device(remote_tmp)
-                        if hash_patched_local != hash_patched_device:
+                        if hash_patched_device is None:
+                            actions.append("push_verify_unavailable")
+                            adb(["shell", f"rm -f '{remote_tmp}'"])
+                        elif hash_patched_local != hash_patched_device:
                             actions.append("push_hash_mismatch")
                             adb(["shell", f"rm -f '{remote_tmp}'"])
                         else:
                             # 6. Atomic rename temp → original (original only replaced NOW)
                             mv = adb(["shell", f"mv '{remote_tmp}' '{remote_path}'"])
-                            if mv.returncode != 0:
+                            if mv is None or mv.returncode != 0:
                                 actions.append("rename_failed")
                                 adb(["shell", f"rm -f '{remote_tmp}'"])
                             else:
