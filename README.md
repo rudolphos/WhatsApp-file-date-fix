@@ -72,8 +72,7 @@ anything. Click **Fix Dates**.
 
 ### Notes
 
-- Recognizes: `IMG-`, `VID-`, `PTT-`, `AUD-`, `DOC-` Android naming,
-  `PHOTO-YYYY-MM-DD-HH-MM-SS` (iPhone-style), and `WhatsApp Image
+- Recognizes: `IMG-`, `VID-`, `PTT-`, `AUD-`, `DOC-` Android naming and `WhatsApp Image
   YYYY-MM-DD at HH.MM.SS`. Falls back to any `YYYYMMDD` sequence found in
   the filename if none of those match.
 - No time in the filename → defaults to 12:00:00.
